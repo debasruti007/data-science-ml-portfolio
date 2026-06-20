@@ -1,189 +1,116 @@
-# Production-Grade RAG Engine
+# RAG Engine for Document Question Answering
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Qdrant](https://img.shields.io/badge/Qdrant-f90050?style=flat&logo=qdrant&logoColor=white)](https://qdrant.tech/)
+## Overview
 
-A production-focused Retrieval-Augmented Generation (RAG) system for PDF ingestion and grounded Q&A.
+This project is a Retrieval-Augmented Generation (RAG) system that allows users to upload PDF documents and ask questions based on their contents. The system retrieves relevant information from uploaded documents and uses a Large Language Model (LLM) to generate context-aware answers.
 
-This repository includes:
-- A root application optimized for fast iteration with Streamlit, FastAPI, and Inngest workflow orchestration.
-- A packaged implementation under rag-engine with modular API, core services, and tests.
+The project demonstrates document processing, vector search, and LLM integration for building intelligent document assistants.
 
-## Why This Project
+## Features
 
-The goal is practical document intelligence, not notebook demos:
-- Multi-provider LLM and embedding support: OpenAI, Gemini, Claude, Ollama, and local fallback paths.
-- Durable workflow mode using Inngest step functions.
-- Local-first resilience with graceful fallback when remote dependencies are unavailable.
-- Source-aware answers with retrieval-backed context.
+* PDF document upload and processing
+* Text chunking and embedding generation
+* Vector search using Qdrant
+* Retrieval-Augmented Generation (RAG)
+* Multi-provider LLM support
+* Source-based answer generation
+* Streamlit user interface
+* FastAPI backend services
 
-## High-Level Architecture
+## Tech Stack
+
+* Python
+* FastAPI
+* Streamlit
+* Qdrant
+* OpenAI / Gemini / Claude
+* Ollama
+* Pydantic
+
+## How It Works
+
+1. Users upload PDF documents.
+2. Documents are divided into smaller text chunks.
+3. Embeddings are generated for each chunk.
+4. Embeddings are stored in Qdrant.
+5. User questions are converted into embeddings.
+6. Relevant document sections are retrieved.
+7. The LLM generates answers using the retrieved context.
+
+## Project Structure
 
 ```text
-PDF Upload -> Chunking -> Embeddings -> Qdrant -> Top-K Retrieval -> LLM Answer
-               |                               |
-               +--------- Inngest Step Functions ----------+
+rag-engine/
+│
+├── main.py
+├── streamlit_app.py
+├── data_loader.py
+├── vector_db.py
+├── custom_types.py
+├── uploads/
+├── qdrant_storage/
+├── rag-engine/
+├── tests/
+└── README.md
 ```
 
-Core design patterns:
-- Deterministic IDs for idempotent re-ingestion.
-- Provider abstraction via environment configuration.
-- Graceful degradation for vector store and model services.
-- Preflight diagnostics in UI for developer-friendly troubleshooting.
+## Installation
 
-## Project Layout
-
-```text
-.
-├── main.py                 # FastAPI + Inngest functions (root app)
-├── streamlit_app.py        # Streamlit UI with local fallback + preflight checks
-├── data_loader.py          # PDF loading, chunking, embeddings
-├── vector_db.py            # Qdrant integration with local fallback
-├── custom_types.py         # Pydantic models
-├── qdrant_storage/         # Embedded/local Qdrant data path
-├── uploads/                # Uploaded PDFs
-├── doc.md                  # Extended technical walkthrough
-└── rag-engine/             # Packaged production structure
-    ├── src/rag_engine/
-    ├── tests/
-    ├── docker/
-    └── pyproject.toml
-```
-
-## Quick Start (Windows PowerShell)
-
-### 1. Create and activate virtual environment
-
-```powershell
-python -m venv .venv
-(Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& .\.venv\Scripts\Activate.ps1)
-```
-
-### 2. Install dependencies
-
-```powershell
-python -m pip install --upgrade pip
-python -m pip install -e .
-```
-
-### 3. Run Streamlit UI (local mode)
-
-```powershell
-python -m streamlit run streamlit_app.py
-```
-
-Open: http://127.0.0.1:8501
-
-This mode is enough to ingest and query with local fallback behavior.
-
-## Full Workflow Mode (Streamlit + FastAPI + Inngest)
-
-Run each service in a separate terminal from repository root.
-
-### Terminal A: FastAPI backend
-
-```powershell
-$env:INNGEST_DEV='1'
-python -m uvicorn main:app --host 127.0.0.1 --port 8000
-```
-
-### Terminal B: Inngest Dev Server
-
-```powershell
-.\.tools\inngest\inngest.exe dev -u http://127.0.0.1:8000/api/inngest --no-discovery
-```
-
-### Terminal C: Streamlit UI
-
-```powershell
-python -m streamlit run streamlit_app.py
-```
-
-Expected endpoints:
-- Streamlit: http://127.0.0.1:8501
-- FastAPI Inngest endpoint: http://127.0.0.1:8000/api/inngest
-- Inngest Dev Server: http://127.0.0.1:8288
-
-## Configuration
-
-The root app reads configuration from .env.
-
-Important variables:
-- LLM_PROVIDER: openai | gemini | claude | ollama | local
-- EMBED_PROVIDER: openai | gemini | ollama | local
-- OLLAMA_BASE_URL
-- OLLAMA_MODEL
-- OLLAMA_EMBED_MODEL
-- INNGEST_ENABLED: true | false
-- INNGEST_DEV: 1 | 0
-- INNGEST_API_BASE: usually http://127.0.0.1:8288/v1
-- INNGEST_EVENT_API_BASE: usually http://127.0.0.1:8288
-- QDRANT_PATH: local embedded storage path
-- EMBED_DIM: should match embedding model output dimensions
-
-Note: Keep secrets such as API keys in .env and never commit them.
-
-## Running The Packaged Service (rag-engine)
-
-If you want the package-based API/UI implementation:
-
-```powershell
+```bash
+git clone <repository-url>
 cd rag-engine
-python -m pip install -e .[dev]
-python -m uvicorn rag_engine.api.app:app --reload --port 8000
+
+pip install -r requirements.txt
 ```
 
-Optional commands (from rag-engine):
+## Run the Project
 
-```powershell
-pytest
-ruff check src tests
+### Start the FastAPI Backend
+
+```bash
+uvicorn main:app --reload
 ```
 
-## Docker (rag-engine)
+### Start the Streamlit Interface
 
-From rag-engine directory:
-
-```powershell
-docker compose -f docker/docker-compose.yml up --build
+```bash
+streamlit run streamlit_app.py
 ```
 
-This launches Qdrant and the packaged API service.
+The application will be available at:
 
-## Troubleshooting
+```text
+http://localhost:8501
+```
 
-### Streamlit shows Inngest preflight warning
-- Verify FastAPI is running on port 8000.
-- Verify Inngest Dev Server is running on port 8288.
-- Confirm .env has INNGEST_API_BASE and INNGEST_EVENT_API_BASE set to localhost endpoints.
+## Example Use Cases
 
-### Qdrant unavailable
-- The app will attempt local embedded fallback using QDRANT_PATH.
-- Ensure the process can write to qdrant_storage.
+* Document question answering
+* Knowledge base assistant
+* Research document exploration
+* Internal company documentation search
 
-### Provider/API errors
-- Check provider keys and model names in .env.
-- For Ollama, confirm OLLAMA_BASE_URL and model availability.
+## Learning Outcomes
 
-## Security Notes
+Through this project, I learned:
 
-- Do not commit .env files with real secrets.
-- Use local model providers for sensitive workloads when data residency is required.
-- Restrict uploaded document handling to trusted sources and controlled environments.
+* Retrieval-Augmented Generation (RAG)
+* Vector databases and embeddings
+* Document processing pipelines
+* FastAPI backend development
+* Streamlit application development
+* LLM integration and prompt engineering
 
-## Engineering Highlights
+## Future Improvements
 
-- Multi-provider runtime routing for both embeddings and generation.
-- Local fallback mode for degraded infrastructure conditions.
-- Deterministic ingestion IDs for idempotency.
-- Source-aware answers to improve auditability and trust.
+* Support for additional document formats
+* Conversation memory
+* Improved retrieval and reranking
+* User authentication
+* Cloud deployment support
 
 ## License
 
-Add your preferred license file (MIT, Apache-2.0, etc.) at repository root.
-
----
-
-Built for real-world RAG operations by Adil Shamim.
+This project is based on open-source code released under the MIT License.
+Original copyright belongs to the respective author.
+I have used this project for learning, documentation, and portfolio-building purposes.
