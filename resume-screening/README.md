@@ -1,95 +1,101 @@
-#  Resume Screening — Reimagining Recruitment with Intelligence
+# Resume Screening System
 
+## Overview
 
-##  Why This Project?
+This project automates resume analysis and candidate-job matching using Natural Language Processing (NLP) and machine learning techniques. It extracts information from resumes, compares candidate profiles with job descriptions, and provides similarity-based matching results through an interactive web application.
 
-Hiring is broken. Recruiters are drowning in resumes, losing time, and missing great talent.
+The project demonstrates the application of NLP, text processing, and machine learning in recruitment analytics.
 
-**Resume Screening** is not just another Python project — it's a bold step toward transforming how we discover potential. Built with clarity, speed, and purpose, this tool uses intelligent automation to read resumes, understand them, and match them to the right opportunities.
+## Features
 
-This isn’t about filtering resumes.
-This is about **finding the right people — faster, smarter, and without bias**.
+* Resume text extraction and processing
+* Job description matching
+* NLP-based text analysis
+* Similarity scoring between resumes and job descriptions
+* Interactive Streamlit interface
+* Automated candidate evaluation workflow
 
-![Output](https://github.com/AdilShamim8/Resume-Screening/blob/main/image/Output.gif)
+## Tech Stack
 
----
+* Python
+* Streamlit
+* Pandas
+* NumPy
+* scikit-learn
+* spaCy
+* TF-IDF Vectorization
 
-##  What It Does
+## How It Works
 
-*  **Extracts key resume insights** with NLP — clean, structured, and fast.
-*  **Matches candidates** to job descriptions using semantic similarity.
-*  **Learns and improves** with machine learning algorithms.
-*  **Runs on Streamlit**, for instant, interactive, and beautiful UI.
+1. Resume and job description data are loaded into the system.
+2. Text is cleaned and preprocessed.
+3. Important keywords and features are extracted.
+4. TF-IDF vectors are generated for resumes and job descriptions.
+5. Similarity scores are calculated.
+6. Matching results are displayed through the Streamlit interface.
 
----
+## Project Structure
 
-## ⚙ Tech Behind the Magic
-
-| Technology              | Purpose                          |
-| ----------------------- | -------------------------------- |
-| **Python**              | Core logic and data processing   |
-| **NLP (spaCy, TF-IDF)** | Understands human language       |
-| **ML (scikit-learn)**   | Makes intelligent predictions    |
-| **Streamlit**           | Interactive user interface       |
-| **Pandas, NumPy**       | Data handling and transformation |
-
----
-
-##  Project Structure
-
-```
+```text
 Resume-Screening/
-├── DataSet/         # Sample resumes and job data
-├── Model/           # ML models and logic
-├── WebSite/         # Streamlit app code
+│
+├── DataSet/
+├── Model/
+├── WebSite/
 ├── requirements.txt
 └── README.md
 ```
 
----
-
-##  Getting Started
+## Installation
 
 ```bash
-# Step 1: Clone the repository
-git clone https://github.com/AdilShamim8/Resume-Screening.git
-
-# Step 2: Navigate to the folder
+git clone <repository-url>
 cd Resume-Screening
 
-# Step 3: Install dependencies
 pip install -r requirements.txt
+```
 
-# Step 4: Launch the app
+## Run the Project
+
+```bash
 streamlit run WebSite/app.py
 ```
 
----
+The application will be available at:
 
-##  Want to Contribute?
+```text
+http://localhost:8501
+```
 
-Whether you're a coder, designer, or just someone passionate about solving real-world problems — your ideas are welcome. Fork it, build it, improve it.
+## Example Use Cases
 
----
+* Resume screening
+* Candidate-job matching
+* Recruitment analytics
+* HR decision support
+* Resume keyword analysis
 
-##  License
+## Learning Outcomes
 
-[MIT License](License) — because great tools should be free to build, break, and better.
+Through this project, I learned:
 
----
+* Natural Language Processing (NLP)
+* Text preprocessing techniques
+* TF-IDF vectorization
+* Similarity-based recommendation systems
+* Machine learning workflows
+* Streamlit application development
 
-##  What’s Next?
+## Future Improvements
 
-*  Add resume ranking
-*  Integrate LinkedIn profile parsing
-*  Build a full recruiter dashboard
-*  Add feedback-based ML training
+* Resume ranking system
+* Additional NLP models
+* LinkedIn profile integration
+* Recruiter dashboard
+* Advanced candidate recommendations
 
----
+## License
 
-##  Final Thought
-
-This is more than code.
-It’s a tool for every company that believes hiring the right people is the most important thing they do.
-
-Let’s reinvent recruitment — one resume at a time.
+This project is based on open-source code released under the MIT License.
+Original copyright belongs to the respective author.
+I have used this project for learning, documentation, and portfolio-building purposes.
